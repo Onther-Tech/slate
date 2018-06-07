@@ -5,7 +5,6 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
 includes:
@@ -14,109 +13,99 @@ includes:
 search: true
 ---
 
-# Introduction
+# 들어가는말
 
 안녕하세요. 온더의 도쿄 프로젝트 API문서입니다.
 
-# Authentication
-
-> 인증을 위해서 별도의 코드를 작성할 필요는 없습니다.:
-
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-<!-- > Make sure to replace `meowmeowmeow` with your API key. -->
+# 인증
 
 도쿄 프로젝트는 별도의 API키를 사용하지 않습니다.
 
-<!-- `Authorization: meowmeowmeow` -->
+# 유저
 
-<!-- <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside> -->
+## 특정 유저 조회하기
 
-# Kittens
-
-## Get All Kittens
+> 요청 예제
 
 ```javascript
-const kittn = require('kittn');
+//https://github.com/request/request
+const request = require('request');
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
+request(
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    method : 'GET',
+    uri : 'http://onther.io/api/user/<user_id>'
+  }, (error, response, body) => {
+    if(error){
+      console.log(response.statusCode);
+    } else {
+      console.log(body);
+    }
   }
-]
+);
 ```
 
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> 응답 예제
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "error" : 0,
+  "result" : "<user_id>"
 }
 ```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+user_id를 가진 유저가 있는지 여부를 확인합니다.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET http://onther.io/api/user/<user_id>`
+
+### URL Parameters
+
+Parameter |  Description
+--------- |  -----------
+user_id |  2^256의 랜덤값을 통해서 만들어진 이더리움 주소
+
+
+<aside class="success">
+유저값이 반환되면 해당 유저는 존재합니다!
+</aside>
+
+## 유저 생성하기
+
+> 요청 예제
+
+```javascript
+//https://github.com/request/request
+const request = require('request');
+
+request(
+  {
+    method : 'POST',
+    uri : 'http://onther.io/api/user'
+  }, (error, response, body) => {
+    if(error){
+      console.log(response.statusCode);
+    } else {
+      console.log(body);
+    }
+  }
+);
+```
+
+> 응답예제
+
+```json
+{
+  "error": 0,
+  "result": "<user_id>"
+}
+```
+
+이 요청은 유저의 계정을 생성해 반환합니다.
+
+### HTTP Request
+
+`POST http://onther.io/api/user`
 
 ### URL Parameters
 
